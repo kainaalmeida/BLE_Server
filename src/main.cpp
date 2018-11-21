@@ -8,6 +8,8 @@ BLECharacteristic *characteristicTX; // através desse objeto iremos enviar dado
 
 bool deviceConected = false; //controle de dispositivo conectado
 
+const int pin_relay = 13;
+
 #define SERVICE_UUID "ab0828b1-198e-4351-b779-901fa0e0371g"
 #define CHARACTERISTIC_UUID_RX "4ac8a682-9736-4e5d-932b-e9b31405049t"
 #define CHARACTERISTIC_UUID_TX "0972EF8C-7613-4075-AD52-756F33D4DA9w"
@@ -31,11 +33,11 @@ class CharacteristicCallbacks : public BLECharacteristicCallbacks
       //L1 liga o LED | L0 desliga o LED
       if (rxValue.find("L1") != -1)
       {
-        // digitalWrite(LED, HIGH);
+        digitalWrite(pin_relay, HIGH);
       }
       else if (rxValue.find("L0") != -1)
       {
-        // digitalWrite(LED, LOW);
+        digitalWrite(pin_relay, LOW);
       }
       // B1 liga o Buzzer | B0 desliga o Buzzer
       else if (rxValue.find("B1") != -1)
@@ -66,7 +68,9 @@ class ServerCallbacks : public BLEServerCallbacks
 
 void setup()
 {
-  Serial.begin(9600);
+  Serial.begin(115200);
+
+  pinMode(pin_relay, OUTPUT);
 
   //Cria o BLE device
   BLEDevice::init("SMCode-BLE"); // Nome do dispositivo bluetooth
